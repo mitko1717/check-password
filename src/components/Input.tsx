@@ -1,39 +1,19 @@
 import TextField from '@mui/material/TextField';
 import { ChangeEvent, useEffect, useState } from 'react';
+import { parseCharacter } from '../helpers/parsing';
 
 const Input = () => {
   const [input, setInput] = useState<string>('')
   const [passwordStrength, setPasswordStrength] = useState<number>()
-  const [passwordStrengthColors, setPasswordStrengthColors] = useState({
+  const [passwordStrengthColors, setPasswordStrengthColors] = useState<any>({
     first: "gray",
     second: "gray",
     third: "gray",
   }) 
 
-  function isLetterParser(char: string) {
-    return char.toLowerCase() != char.toUpperCase();
-  }
-  function isNumericParser(char: string){
-    return /^\d+$/.test(char);
-  }
-  function isSymbolParser(char: string){
-    return /[~`!@#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(char);
-   }
-
-  const parseCharacter = (char: string) => {
-    const isLetter = isLetterParser(char)
-    if (isLetter) return 'letter'
-    const isNum = isNumericParser(char)
-    if(isNum) return 'number'
-    const isSymbol = isSymbolParser(char)
-    if (isSymbol) return 'symbol'
-
-    return 'undefined'
-  }
-
   const parsePasswordStrength = (val: string) => {    
     if (val.length < 8) {
-      setPasswordStrength(3)
+      setPasswordStrength(0)
       setPasswordStrengthColors({
         first: "red",
         second: "red",
@@ -94,14 +74,16 @@ const Input = () => {
   
   return (
     <div className='w-[50%] mt-4'>
+        <p className='mb-4'>passwordStrength level: {passwordStrength}</p>
         <TextField id="outlined-basic" label="Password" variant="outlined" fullWidth value={input} onChange={handleChange}/>
 
-        <div>
-          first: {passwordStrengthColors.first} <br/>
-          second: {passwordStrengthColors.second} <br/>
-          third: {passwordStrengthColors.third} 
+        <div className='w-full flex mt-4'>
+          {Object.keys(passwordStrengthColors).map(obj => {            
+            return (
+              <p key={obj} className="h-2 rounded w-full mx-1" style={{background: `${passwordStrengthColors[obj]}`}} />
+            )
+          })}
         </div>
-        <p>passwordStrength: {passwordStrength}</p>
     </div>
   )
 }
