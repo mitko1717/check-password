@@ -11,8 +11,14 @@ const Input = () => {
     third: "gray",
   }) 
 
-  const parsePasswordStrength = (val: string) => {    
-    if (val.length < 8) {
+  const parsePasswordStrength = (val: string) => {  
+    if (input.length === 0) {
+      setPasswordStrengthColors({
+        first: "gray",
+        second: "gray",
+        third: "gray",
+      })
+    } else if (val.length < 8) {
       setPasswordStrength(0)
       setPasswordStrengthColors({
         first: "red",
@@ -24,7 +30,6 @@ const Input = () => {
 
       val.split("").forEach(char => {
         let typeofChar: string = parseCharacter(char)
-
         if (!types.join(" ").includes(typeofChar) && typeofChar !== 'undefined') {
           types.push(typeofChar)
         }
@@ -62,14 +67,6 @@ const Input = () => {
 
   useEffect(() => {
     parsePasswordStrength(input)
-
-    if (input.length === 0) {
-      setPasswordStrengthColors({
-        first: "gray",
-        second: "gray",
-        third: "gray",
-      })
-    }
   }, [input])
   
   return (
